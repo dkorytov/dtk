@@ -14,9 +14,9 @@ void read_gio(char* file_name, std::string var_name, T*& data,int only_rank=-1){
   uint64_t max_size = 0;
   uint64_t rank_size[num_ranks];
   int start =0;
-  std::cout<<std::endl;
-  std::cout<<"num_ranks "<<num_ranks<<std::endl;
-  std::cout<<"only_rank "<<only_rank<<std::endl;
+  // std::cout<<std::endl;
+  // std::cout<<"num_ranks "<<num_ranks<<std::endl;
+  // std::cout<<"only_rank "<<only_rank<<std::endl;
   for(int i =0;i<num_ranks;++i){
     if(only_rank==-1){
       //std::cout<<"Reading all data"<<std::endl;
@@ -32,25 +32,25 @@ void read_gio(char* file_name, std::string var_name, T*& data,int only_rank=-1){
       max_size = rank_size[i];
   }
   T* rank_data = new T[max_size+reader.requestedExtraSpace()/sizeof(T)];
-  std::cout<<"max_size: "<<max_size<<std::endl;
+  // std::cout<<"max_size: "<<max_size<<std::endl;
   int64_t offset =0;
   reader.addVariable(var_name,rank_data,true);
   for(int i=0;i<num_ranks;++i){
     //std::cout<<"reading rank"<<i<<std::endl;
     if(only_rank == -1 || only_rank == i){
-      std::cout<<"read"<<std::endl;
+      // std::cout<<"read"<<std::endl;
       reader.readData(i,false);
-      for(int j =0;j<5;++j)
-	std::cout<<rank_data[j]<<std::endl;
+      // for(int j =0;j<5;++j)
+      // 	std::cout<<rank_data[j]<<std::endl;
       std::copy(rank_data,rank_data+rank_size[i],data+offset);
-      for(int j =0;j<5;++j)
-	std::cout<<data[j]<<std::endl;
+      // for(int j =0;j<5;++j)
+      // 	std::cout<<data[j]<<std::endl;
       offset +=rank_size[i];
     }
   }
   delete [] rank_data;
-  for(int j =0;j<5;++j)
-    std::cout<<data[j]<<std::endl;
+  // for(int j =0;j<5;++j)
+  //   std::cout<<data[j]<<std::endl;
 
   reader.close();
 }
