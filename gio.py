@@ -9,7 +9,10 @@ libpygio = ct.CDLL(os.path.abspath('dtk/lib/libpygio.so'))
 #we need to define the return type ("restype") and
 #the argument types
 libpygio.get_elem_num.restype=ct.c_int64
-libpygio.get_elem_num.argtypes=[ct.c_char_p]
+libpygio.get_elem_num.argtypes=[ct.c_char_p, ct.c_int]
+
+libpygio.get_block_num.restype=ct.c_int64
+libpygio.get_block_num.argtypes=[ct.c_char_p]
 
 libpygio.get_variable_type.restype=ct.c_int
 libpygio.get_variable_type.argtypes=[ct.c_char_p,ct.c_char_p]
@@ -43,7 +46,7 @@ libpygio.inspect_gio.restype=None
 libpygio.inspect_gio.argtypes=[ct.c_char_p]
 
 def gio_read(file_name,var_name,rank_num=-1):
-    var_size = libpygio.get_elem_num(file_name.encode('utf-8'))
+    var_size = libpygio.get_elem_num(file_name.encode('utf-8'), rank_num)
     var_type = libpygio.get_variable_type(file_name.encode('utf-8'),var_name.encode('utf-8'))
     if(var_type==10):
         print("Variable not found")
@@ -83,8 +86,12 @@ def gio_read(file_name,var_name,rank_num=-1):
         return result        
     else:
         raise ValueError("var_type not support {} [number to type listed in gio.hpp]".format(var_type))
+
 def gio_inspect(file_name):
     libpygio.inspect_gio(file_name.encode('utf-8'))
 
-def gio_size(file_name):
-    return libpygio.read_elem_num(file_name.encode('utf-8'))
+def gio_get_size(file_name, rank=-1):
+    return libpygio.get_elem_num(file_name.encode('utf-8'), rank)
+
+def gio_get_block_num(file_name):
+    return libpygio.get_block_num(file_name.encode('utf-8'))
