@@ -38,7 +38,7 @@ void read_gio(char* file_name, std::string var_name, T*& data,int only_rank=-1){
   for(int i=0;i<num_ranks;++i){
     //std::cout<<"reading rank"<<i<<std::endl;
     if(only_rank == -1 || only_rank == i){
-      std::cout<<"read"<<std::endl;
+      // std::cout<<"read"<<std::endl;
       reader.readData(i,false);
       // for(int j =0;j<5;++j)
       // 	std::cout<<rank_data[j]<<std::endl;

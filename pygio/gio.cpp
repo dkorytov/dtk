@@ -20,8 +20,8 @@ void read_gio_int64 (char* file_name, char* var_name, int64_t* data, int only_ra
   read_gio<int64_t>(file_name,var_name,data,only_rank);
 }
 void read_gio_uint8 (char* file_name, char* var_name, uint8_t* data, int only_rank){
-  std::cout<<"we are trying to read"<<std::endl;
-   read_gio<uint8_t>(file_name,var_name,data,only_rank);
+  //std::cout<<"we are trying to read"<<std::endl;
+  read_gio<uint8_t>(file_name,var_name,data,only_rank);
 }
   
 int64_t get_elem_num(char* file_name, int only_rank){
