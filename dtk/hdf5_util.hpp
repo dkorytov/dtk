@@ -62,6 +62,7 @@ namespace dtk{
     if(alloc){
       hsize_t datasize = ds.getSimpleExtentNpoints(); 
       out = new T[datasize];
+      size = datasize;
     }
     dataset.read(&out[0],hdf5_type<T>(),ds);
 
