@@ -15,4 +15,5 @@ try:
 except OSError as ie:
     print("Could not import gio.py due to dtk/libs/libpygio.so not being built. Skipping")
     print("\tRead dtk/pygio/README.TXT on how to compile libpygi.so")
+    print(ie)
 # from .gio import *

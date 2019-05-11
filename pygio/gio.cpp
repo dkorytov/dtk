@@ -20,11 +20,11 @@ void read_gio_int64 (char* file_name, char* var_name, int64_t* data, int only_ra
   read_gio<int64_t>(file_name,var_name,data,only_rank);
 }
 void read_gio_uint8 (char* file_name, char* var_name, uint8_t* data, int only_rank){
-  std::cout<<"we are trying to read"<<std::endl;
-   read_gio<uint8_t>(file_name,var_name,data,only_rank);
+  //std::cout<<"we are trying to read"<<std::endl;
+  read_gio<uint8_t>(file_name,var_name,data,only_rank);
 }
   
-int64_t get_elem_num(char* file_name){
+int64_t get_elem_num(char* file_name, int only_rank){
   // std::cout<<"Getting elem num"<<std::endl;
   gio::GenericIO reader(file_name);
   reader.openAndReadHeader(gio::GenericIO::MismatchAllowed);
@@ -33,14 +33,21 @@ int64_t get_elem_num(char* file_name){
   // std::cout<<"num_ranks"<<num_ranks<<std::endl;
   for(int i =0;i<num_ranks;++i){
     int num = reader.readNumElems(i);
-    // std::cout<<"reader.readNumElems(i): "<<num<<std::endl;
-    size +=reader.readNumElems(i);
+    //std::cout<<"reader.readNumElems(i): "<<num<<std::endl;
+    if(only_rank == -1 || only_rank == i)
+       size +=reader.readNumElems(i);
   }
   reader.close();
   //std::cout<<size<<std::endl;
   return size;
 }
 
+int64_t get_block_num(char* file_name){
+  gio::GenericIO reader(file_name);
+  reader.openAndReadHeader(gio::GenericIO::MismatchAllowed);
+  int num_ranks = reader.readNRanks();
+  return num_ranks;
+}
 var_type get_variable_type(char* file_name,char* var_name){
   // std::cout<<"Getting variable type"<<std::endl;
   gio::GenericIO reader(file_name);
@@ -73,7 +80,7 @@ var_type get_variable_type(char* file_name,char* var_name){
 }
 
 extern "C" void inspect_gio(char* file_name){
-  int64_t size = get_elem_num(file_name);
+  int64_t size = get_elem_num(file_name, -1);
   gio::GenericIO reader(file_name);
   std::vector<gio::GenericIO::VariableInfo> VI;
   reader.openAndReadHeader(gio::GenericIO::MismatchAllowed);
