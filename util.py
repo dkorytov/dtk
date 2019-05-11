@@ -10,7 +10,7 @@ import matplotlib.colors as colors
 import h5py 
 import pandas as pd
 import os.path
-
+import time 
 def cat_strings(strings):
     string_result = "";
     for st in strings:
@@ -213,3 +213,29 @@ def resample_distribution(dist_src,dist_target,src_range=None,target_range=None,
 
     return src2trg
     
+def save_dict_hdf5(fname, cat, verbose=True):
+    if verbose:
+        print "Saving to", fname
+        t0 = time.time()
+    hfile = h5py.File(fname, 'w')
+    for key in cat.keys():
+        hfile[key] = cat[key]
+    hfile.close()
+    if verbose:
+        t1 = time.time()
+        print "\ttime:", t1-t0
+
+def load_dict_hdf5(fname, verbose=True):
+    if verbose:
+        print "Loading from", fname
+        t0 = time.time()
+
+    cat = {}
+    hfile = h5py.File(fname, 'w')
+    for key in hfile.keys():
+        cat[key] = hfile[key]
+    if verbose:
+        t1 = time.time()
+        print "\ttime:", t1-t0
+
+    return cat
