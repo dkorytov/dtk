@@ -89,6 +89,12 @@ def hdf5_replace(hfile,name, data):
     del hfile[name]
     hfile[name]=data
 
+def log_avg(xs):
+    xs = np.array(xs)
+    lg_xs = np.log(xs)
+    lg_avg = np.mean(lg_xs)
+    return np.exp(lg_avg)
+
 def bins_avg(data):
     return (data[1:]+data[:-1])/2.0
 
@@ -231,11 +237,109 @@ def load_dict_hdf5(fname, verbose=True):
         t0 = time.time()
 
     cat = {}
-    hfile = h5py.File(fname, 'w')
+    hfile = h5py.File(fname, 'r')
     for key in hfile.keys():
-        cat[key] = hfile[key]
+        cat[key] = hfile[key].value
     if verbose:
         t1 = time.time()
         print "\ttime:", t1-t0
 
     return cat
+
+def select_dict(dict_cat, slct):
+    dict_result = {}
+    for key in dict_cat.keys():
+        dict_result[key] = dict_cat[key][slct]
+    return dict_result
+
+def decenter_bins(bin_cen):
+    diff = np.diff(bin_cen)[0]
+    bin_edges = np.zeros(len(bin_cen)+1)
+    bin_edges[:-1] = bin_cen-diff/2.0
+    bin_edges[-1] = bin_cen[-1]+diff/2.0
+    return bin_edges
+    
+def decenter_log_bins(bin_cen):
+    lg_bin_cen = np.log10(bin_cen)
+    lg_bin_edges = decenter_bins(lg_bin_cen)
+    return 10**lg_bin_edges
+
+def diff_curves(x1, y1, x2, y2, bins = 100, log=False):
+    x_min = max(np.min(x1), np.min(x2))
+    x_max = min(np.max(x1), np.max(x2))
+    if log:
+        x = np.logspace(np.log10(x_min), np.log10(x_max), bins)
+    else:
+        x = np.linspace(x_min, x_max, bins)
+    y1_new = np.interp(x, x1, y1)
+    y2_new = np.interp(x, x2, y2)
+    y_diff = y1_new - y2_new
+    y_diff_relative = y_diff/y2_new
+    return x, y_diff, y_diff_relative
+
+def get_fill_between_limits(y, y_err):
+    y_lower = y-y_err
+    y_upper = y+y_err
+    return y_lower, y_upper
+
+def get_linbins(x, bins=100):
+    min_x = np.nanmin(x)
+    max_x = np.nanmax(x)
+    return np.linspace(min_x, max_x, bins)
+
+def get_logbins(x, bins=100):
+    min_x = np.nanmin(x)
+    max_x = np.nanmax(x)
+    return np.logspace(np.log10(min_x), np.log10(max_x), bins)
+    
+class ETA:
+    def __init__(self):
+        self.t0 = time.time()
+        
+    def reset(self):
+        self.t0 = time.time()
+
+    def get_eta(self, i, i_tot):
+        time_per_iter = self.get_per_iter(i)
+        i_left = i_tot-i
+        return time_per_iter*i_left
+        
+    def get_per_iter(self, i):
+        if i == 0:
+            return np.nan
+        t1 = time.time()
+        time_per_iter = (t1-self.t0)/i
+        return time_per_iter
+    
+    def print_progress(self, i, i_tot, prefix=""):
+        eta = convert_sec_to_time_string(self.get_eta(i, i_tot))
+        per_iter = convert_sec_to_time_string(self.get_per_iter(i))
+        print "{}{}/{} ETA: {} ({})".format(prefix, i, i_tot, eta, per_iter)
+        return self
+    
+    def print_done(self, prefix=""):
+        t_tot = time.time()-self.t0
+        print "{}DONE. time: {}".format(prefix, convert_sec_to_time_string(t_tot))
+        return self
+
+def convert_sec_to_time_string(t):
+    if ~np.isfinite(t):
+        return "nan"
+    if t<120:
+        return "{:.2f}s".format(t)
+    elif t<60*60*2:
+        return "{:.0f}m:{:.0f}s".format(t//60, t%60)
+    else:
+        return "{:.0f}h:{:.0f}m".format(t//3600, t%(3600))
+    
+def within_relative_tolerance(test_value, target_value, tolerance):
+    diff = np.abs((test_value-target_value)/target_value)
+    return diff<tolerance
+    
+def within_absolute_tolerance(test_value, target_value, tolerance):
+    diff = np.abs(test_value, target_value)
+    return diff<tolerance
+
+def invert_sort(srt):
+    return np.argsort(srt)
+
