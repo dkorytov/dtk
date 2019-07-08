@@ -1,5 +1,8 @@
 import numpy as np
+<<<<<<< HEAD
 from scipy.interpolate import interp1d
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
 
 
 #converts simulations steps into z/a and
@@ -75,6 +78,7 @@ def NFW_slope(r,c):
 #     rs = r/c
 #     M = np.log((rs+r)/rs) - r
 #     return M_enclosed
+<<<<<<< HEAD
 
 def nfw_mass_enclosed_scale(r, Rs):
     """The relative amount of mass enclosed of a nfw profile as a
@@ -123,3 +127,5 @@ class NFWConverter:
         print(np.min(target_density), np.max(target_density))
         R_target_delta_Rs_units = self.radius_from_enclosed_density(target_density) ; print("...")
         return R_target_delta_Rs_units/conc
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a

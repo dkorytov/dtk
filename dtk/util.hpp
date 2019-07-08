@@ -121,8 +121,11 @@ namespace dtk{
     return str;
   }
 
+<<<<<<< HEAD
   bool string_has(std::string str, std::string target);
   
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
   
   // Makes the directory(tree) specified 
   // if it doesn't exist. This only works on

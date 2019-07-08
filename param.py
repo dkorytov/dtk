@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 import numpy as np
 import sys
 import readline
@@ -9,11 +10,23 @@ class Param:
     def __init__(self,file_name=""):
         self.data = {}
         self.data_key_order = []
+=======
+from __future__ import print_function
+
+import numpy as np
+import sys
+import readline
+
+class Param:
+    data = {}
+    def __init__(self,file_name=""):
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
         if(file_name != ""):
             self.load(file_name)
     def __contains__(self, item):
         return item in self.data
 
+<<<<<<< HEAD
     def __str__(self):
         result = ""
         for key in self.data_key_order:
@@ -23,6 +36,8 @@ class Param:
             result += "\n"
         return result
 
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
     def load(self,file_name):
         self.data = {}       
         self.append(file_name)
@@ -40,6 +55,7 @@ class Param:
                 if(key in self.data):
                     raise Exception("Duplicate parameters not allowed. Parameter duplicated: \"%s\"." % key)
                 self.data[key] = to_save
+<<<<<<< HEAD
                 self.data_key_order.append(key)
         return
         
@@ -49,6 +65,9 @@ class Param:
             self.data_key_order.append(var_name)
         self.data[var_name] = value.split()
 
+=======
+        return
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
     
     def get_string(self,var_name):
         val = self.get(var_name,np.str);
@@ -90,9 +109,15 @@ class Param:
         elif(val == "false" or val == "False" or val == "FALSE" or val == "F" or val == "f" or val == "0"):
             return False
         else:
+<<<<<<< HEAD
             print "\n\nError: At least one value in parameter \"%s\" cannot convert to bool." %(var_name)
             print "Values: ",self.data[var_name]
             print "Aborting.\n"
+=======
+            print("\n\nError: At least one value in parameter \"%s\" cannot convert to bool." %(var_name))
+            print("Values: ",self.data[var_name])
+            print("Aborting.\n")
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
             raise err
 
         
@@ -117,12 +142,21 @@ class Param:
         try:
             return self.data[var_name].astype(dtype)
         except ValueError as err:
+<<<<<<< HEAD
             print "\n\nError: At least one value in parameter \"%s\" cannot convert to %s." %(var_name,str(dtype))
             print "Values: ",self.data[var_name]
             print "Aborting.\n"
             raise err
         except KeyError as err:
             print "\n\nError: Parameter file does not have \"%s\" as parameter.\nAborting.\n" % var_name
+=======
+            print("\n\nError: At least one value in parameter \"%s\" cannot convert to %s." %(var_name,str(dtype)))
+            print("Values: ",self.data[var_name])
+            print("Aborting.\n")
+            raise err
+        except KeyError as err:
+            print("\n\nError: Parameter file does not have \"%s\" as parameter.\nAborting.\n" % var_name)
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
             raise err
             
 

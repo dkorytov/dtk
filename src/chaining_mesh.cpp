@@ -52,7 +52,10 @@ namespace dtk{
     element_num = size;
     element_index = new size_t[size];
     element_cell  = new size_t[size];
+<<<<<<< HEAD
     std::cout<<"Number of elements: "<<size<<std::endl;
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
     std::cout<<"assigning element cell ids"<<std::endl;
     assign_element_cell(element_positions, size);
     std::cout<<"figuring out groups of cell ids"<<std::endl;
@@ -212,11 +215,15 @@ namespace dtk{
 
   std::vector<size_t> ChainingMeshIndex::query_elements_within(float* target_xyz, float radius){
     size_t neighbors_to_check = 0;
+<<<<<<< HEAD
     // std::cout<<"yo? "<<radius<<"pointer: "<<target_xyz<<std::endl;
     // std::cout<<"position to query: ";
     // for(int i =0;i<3;++i)
     //   std::cout<<target_xyz[i];
     // std::cout<<std::endl;
+=======
+    // std::cout<<"yo?"<<std::endl;
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
     for(int i =0;i<dim_num;++i){
       size_t len = (radius/cell_length_xyz[i])+1.0;
       if(len > neighbors_to_check)

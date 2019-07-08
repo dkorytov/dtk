@@ -4,12 +4,26 @@ import ctypes as ct
 import os
 
 #Define where the library is and load it
+<<<<<<< HEAD
 _path = os.path.dirname('__file__')
 libpygio = ct.CDLL(os.path.abspath('dtk/lib/libpygio.so'))
 #we need to define the return type ("restype") and
 #the argument types
 libpygio.get_elem_num.restype=ct.c_int64
 libpygio.get_elem_num.argtypes=[ct.c_char_p]
+=======
+_path = os.path.abspath(os.path.dirname('__file__'))
+# print(_path + '/dtk/lib/libpygio.so')
+# print(_path)
+libpygio = ct.CDLL(_path + '/dtk/lib/libpygio.so')
+#we need to define the return type ("restype") and
+#the argument types
+libpygio.get_elem_num.restype=ct.c_int64
+libpygio.get_elem_num.argtypes=[ct.c_char_p, ct.c_int]
+
+libpygio.get_block_num.restype=ct.c_int64
+libpygio.get_block_num.argtypes=[ct.c_char_p]
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
 
 libpygio.get_variable_type.restype=ct.c_int
 libpygio.get_variable_type.argtypes=[ct.c_char_p,ct.c_char_p]
@@ -42,6 +56,7 @@ libpygio.read_gio_double.argtypes=[ct.c_char_p,ct.c_char_p,ct.POINTER(ct.c_doubl
 libpygio.inspect_gio.restype=None
 libpygio.inspect_gio.argtypes=[ct.c_char_p]
 
+<<<<<<< HEAD
 def gio_read(file_name,var_name,rank_num=-1):
     var_size = libpygio.get_elem_num(file_name)
     var_type = libpygio.get_variable_type(file_name,var_name)
@@ -50,35 +65,66 @@ def gio_read(file_name,var_name,rank_num=-1):
         raise KeyError()
     elif(var_type==9):
         print "variable type not supported (only int8/int32/int64/float/double are supported)"
+=======
+def gio_read(file_name,var_name,block=-1):
+    var_size = libpygio.get_elem_num(file_name.encode('utf-8'), block)
+    var_type = libpygio.get_variable_type(file_name.encode('utf-8'),var_name.encode('utf-8'))
+    if(var_type==10):
+        print("Variable not found")
+        raise KeyError()
+    elif(var_type==9):
+        print("variable type not supported (only int8/int32/int64/float/double are supported)")
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
         raise ValueError()
     elif(var_type==0):
         #float
         result = np.ndarray(var_size,dtype=np.float32)
+<<<<<<< HEAD
         libpygio.read_gio_float(file_name,var_name,result.ctypes.data_as(ct.POINTER(ct.c_float)),rank_num)
+=======
+        libpygio.read_gio_float(file_name.encode('utf-8'),var_name.encode('utf-8'),result.ctypes.data_as(ct.POINTER(ct.c_float)),block)
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
         return result
     elif(var_type==1):
         #double
         result = np.ndarray(var_size,dtype=np.float64)
+<<<<<<< HEAD
         libpygio.read_gio_double(file_name,var_name,result.ctypes.data_as(ct.POINTER(ct.c_double)),rank_num)
+=======
+        libpygio.read_gio_double(file_name.encode('utf-8'),var_name.encode('utf-8'),result.ctypes.data_as(ct.POINTER(ct.c_double)),block)
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
         return result
     elif(var_type==2):
         #int32
         result = np.ndarray(var_size,dtype=np.int32)
+<<<<<<< HEAD
         libpygio.read_gio_int32(file_name,var_name,result.ctypes.data_as(ct.POINTER(ct.c_int32)),rank_num)
+=======
+        libpygio.read_gio_int32(file_name.encode('utf-8'),var_name.encode('utf-8'),result.ctypes.data_as(ct.POINTER(ct.c_int32)),block)
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
         return result
     elif(var_type==3):
         #int64
         result = np.ndarray(var_size,dtype=np.int64)
+<<<<<<< HEAD
         libpygio.read_gio_int64(file_name,var_name,result.ctypes.data_as(ct.POINTER(ct.c_int64)),rank_num)
+=======
+        libpygio.read_gio_int64(file_name.encode('utf-8'),var_name.encode('utf-8'),result.ctypes.data_as(ct.POINTER(ct.c_int64)),block)
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
         return result        
     elif(var_type==4):
         #int8
         result = np.ndarray(var_size,dtype=np.int8)
+<<<<<<< HEAD
         libpygio.read_gio_int8(file_name,var_name,result.ctypes.data_as(ct.POINTER(ct.c_int8)),rank_num)
+=======
+        libpygio.read_gio_int8(file_name.encode('utf-8'),var_name.encode('utf-8'),result.ctypes.data_as(ct.POINTER(ct.c_int8)),block)
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
         return result        
     elif(var_type==5):
         #int8
         result = np.ndarray(var_size,dtype=np.uint8)
+<<<<<<< HEAD
         libpygio.read_gio_uint8(file_name,var_name,result.ctypes.data_as(ct.POINTER(ct.c_uint8)),rank_num)
         return result        
     else:
@@ -88,3 +134,18 @@ def gio_inspect(file_name):
 
 def gio_size(file_name):
     return libpygio.read_elem_num(file_name)
+=======
+        libpygio.read_gio_uint8(file_name.encode('utf-8'),var_name.encode('utf-8'),result.ctypes.data_as(ct.POINTER(ct.c_uint8)),block)
+        return result        
+    else:
+        raise ValueError("var_type not support {} [number to type listed in gio.hpp]".format(var_type))
+
+def gio_inspect(file_name):
+    libpygio.inspect_gio(file_name.encode('utf-8'))
+
+def gio_get_size(file_name, block=-1):
+    return libpygio.get_elem_num(file_name.encode('utf-8'), block)
+
+def gio_get_block_num(file_name):
+    return libpygio.get_block_num(file_name.encode('utf-8'))
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a

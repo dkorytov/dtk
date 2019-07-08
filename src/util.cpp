@@ -33,19 +33,28 @@ namespace dtk{
       return false;
     return ensure_dir(file.substr(0,end));
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
   void pause(){
     std::cout<<"Press enter to continue...";
     std::string t;
     std::getline(std::cin,t);
     //    std::getchar();
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
   bool ask_continue(){
     std::cout<<"Coninue? [y/yes/enter or n/no]: ";
     return ask_bool();
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
   bool ask_bool(){
     bool done = true;
     bool result;
@@ -67,6 +76,7 @@ namespace dtk{
     }while(!done);
     return result;
   }
+<<<<<<< HEAD
 
   bool string_has(std::string str, std::string target){
     size_t found = str.find(target);
@@ -79,4 +89,6 @@ namespace dtk{
       return false;
   }
 
+=======
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
 }

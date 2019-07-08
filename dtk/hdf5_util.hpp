@@ -43,11 +43,18 @@ namespace dtk{
     H5::H5File file(file_name,H5F_ACC_RDONLY);
     H5::DataSet dataset = file.openDataSet(var_name);
     H5::DataSpace ds = dataset.getSpace();
+<<<<<<< HEAD
     if(alloc){ 
       hsize_t datasize = ds.getSimpleExtentNpoints(); 
       out = new T[datasize];
       size = datasize;
     } 
+=======
+    if(alloc){
+      hsize_t datasize = ds.getSimpleExtentNpoints(); 
+      out = new T[datasize];
+    }
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
     dataset.read(&out[0],hdf5_type<T>(),ds);
 
   }
@@ -63,6 +70,10 @@ namespace dtk{
     if(alloc){
       hsize_t datasize = ds.getSimpleExtentNpoints(); 
       out = new T[datasize];
+<<<<<<< HEAD
+=======
+      size = datasize;
+>>>>>>> 0143810c3bd8a79d154db28b6fb7f75a1df6dd9a
     }
     dataset.read(&out[0],hdf5_type<T>(),ds);
 
