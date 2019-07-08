@@ -121,6 +121,7 @@ namespace dtk{
     return str;
   }
 
+  bool string_has(std::string str, std::string target);
   
   // Makes the directory(tree) specified 
   // if it doesn't exist. This only works on

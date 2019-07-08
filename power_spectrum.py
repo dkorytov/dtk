@@ -109,6 +109,7 @@ def autocorr3D_grid(grid,n,domain):
     space_dist=np.fft.rfftfreq(n,domain/n)
     print(space_ac[0,0,0])
     print(points_sum)
+
 #    space_ac /= space_ac[0, 0, 0]
     space_ac /=points_sum*points_sum
     space_ac *= n*n*n

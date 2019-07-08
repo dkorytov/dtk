@@ -311,7 +311,6 @@ class Catalog:
         #only merger if they are on the same timestep
         if(verbose):
             print("merging catalogs")
-
         for step in catalog1.step_data.keys():
             if step in catalog2.step_data.keys():
                 if(verbose):

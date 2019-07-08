@@ -211,7 +211,6 @@ namespace dtk{
 
   std::vector<size_t> ChainingMeshIndex::query_elements_within(float* target_xyz, float radius){
     size_t neighbors_to_check = 0;
-    // std::cout<<"yo?"<<std::endl;
     for(int i =0;i<dim_num;++i){
       size_t len = (radius/cell_length_xyz[i])+1.0;
       if(len > neighbors_to_check)

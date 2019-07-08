@@ -33,16 +33,19 @@ namespace dtk{
       return false;
     return ensure_dir(file.substr(0,end));
   }
+
   void pause(){
     std::cout<<"Press enter to continue...";
     std::string t;
     std::getline(std::cin,t);
     //    std::getchar();
   }
+  
   bool ask_continue(){
     std::cout<<"Coninue? [y/yes/enter or n/no]: ";
     return ask_bool();
   }
+
   bool ask_bool(){
     bool done = true;
     bool result;
@@ -63,5 +66,16 @@ namespace dtk{
       }
     }while(!done);
     return result;
+  }
+
+  bool string_has(std::string str, std::string target){
+    size_t found = str.find(target);
+    std::cout<<"Does \""<<str<<"\" have "<<target<<"?"<<std::endl;
+    bool has = found != std::string::npos;
+    std::cout<<"has: "<<has<<std::endl;
+    if(has)
+      return true;
+    else
+      return false;
   }
 }

@@ -11,6 +11,7 @@ import h5py
 import pandas as pd
 import os.path
 import time 
+
 def cat_strings(strings):
     string_result = "";
     for st in strings:
@@ -122,7 +123,10 @@ def binned_average(data_x,data_y,xbins):
     result = np.zeros(xbins.size-1)
     for i in range(0,result.size):
         slct = bins == i
-        result[i] = np.average(data_y[slct])
+        if np.sum(slct) > 0:
+            result[i] = np.average(data_y[slct])
+        else:
+            result[i] = np.nan
     return result
 
 def binned_median(data_x,data_y,xbins):
@@ -342,4 +346,5 @@ def within_absolute_tolerance(test_value, target_value, tolerance):
 
 def invert_sort(srt):
     return np.argsort(srt)
+
 

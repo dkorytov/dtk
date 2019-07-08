@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.interpolate import interp1d
 
 
 #converts simulations steps into z/a and
@@ -74,3 +75,51 @@ def NFW_slope(r,c):
 #     rs = r/c
 #     M = np.log((rs+r)/rs) - r
 #     return M_enclosed
+
+def nfw_mass_enclosed_scale(r, Rs):
+    """The relative amount of mass enclosed of a nfw profile as a
+    function of Rs. This function is not normalized to any value, so
+    only relative comparisons should be made
+
+    """
+    return np.log((Rs+r)/Rs) - r/(Rs+r)
+
+def nfw_density_enclosed_scale(r, Rs):
+    """The relative average density of enclosed mass of a nfw profile as
+    a function of Rs. This function is not normalized to any value, so
+    only relative comparisons should be made.
+
+    """
+    return nfw_mass_enclosed_scale(r, Rs)/r**3
+
+class NFWConverter:
+    def __init__(self,lower_limit = 0.001, upper_limit = 10):
+        """The input parameters are scale radius limits where this converter
+        works. Going beyond this radius either on the input or output
+        will cause an exception.
+
+        """
+        radius = np.linspace(lower_limit, upper_limit, 50000)
+        #Unitless density
+        enclosed_density = nfw_density_enclosed_scale(radius, 1.0)
+        log10_enclosed_density = np.log10(enclosed_density)
+        # print("max/min of enclosed density: ",np.max(log10_enclosed_density), np.min(log10_enclosed_density))
+        self.enclosed_density_from_radius = interp1d(radius, log10_enclosed_density)
+        self.radius_from_enclosed_density = interp1d(log10_enclosed_density, radius)
+
+    def get_target_overdensity_radius(self, starting_delta, R_delta, conc, target_delta):
+        """We take a nfw halo with a known R200c and concetration and find
+        the R(delta)c, where delta is a specified over density. The function
+        return the radius were the target overdensity is reached"""
+        # print("we are converting R_{:.0f} = {:.2f}, c={:.2f} to R_{:.0f}".format(starting_delta, R_delta, conc, target_delta))
+        R_delta_Rs_units = R_delta*conc ; print("...")
+        print(np.min(conc), np.max(conc))
+        # print("R_{:.0f} in units of Rs is {:.2f}".format(starting_delta, R_delta_Rs_units))
+        starting_density = self.enclosed_density_from_radius(R_delta_Rs_units) ; print("...")
+        # print("The average over log10 density at R_{:.0f} is {:.2f}".format(starting_delta, starting_density))
+        target_density = starting_density+np.log10(target_delta/starting_delta) ; print("...")
+        # print("If we are going from R_{:.0f} to R_{:.0f}, the new log10 density should be {:.2f}".format(starting_delta, target_delta, target_density))
+        print(starting_density)
+        print(np.min(target_density), np.max(target_density))
+        R_target_delta_Rs_units = self.radius_from_enclosed_density(target_density) ; print("...")
+        return R_target_delta_Rs_units/conc

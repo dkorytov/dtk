@@ -20,18 +20,19 @@ LIB     = $(LIB_DIR)/${LIB_NAME}
 PYLIB   = ${LIB_DIR}/libpygio.so
 targets = ${LIB} 
 
-all: ${PYLIB}
+
+all: ${PYLIB} ${LIB}
 
 ${PYLIB}: pygio/gio.hpp pygio/gio.cpp
 	${CC} ${CFLAGS} -c -o  pygio/gio.o -fpic pygio/gio.cpp  -fopenmp
 	${CC} -shared -o ${PYLIB} pygio/gio.o -L${GIO_FRONTEND_LIB} -Wl,--whole-archive,-export-dynamic -lGenericIO -Wl,--no-whole-archive -lgomp
 
-# ${LIB}: ${OBJECTS}
-# 	ar rcs ${LIB} ${OBJECTS}
 
-# ${OBJECTS}: ${OBJ_DIR}/%.o : ${SRC_DIR}/%.cpp
-# 	${CC} ${CFLAGS} -c -o $@ $<
+${LIB}: ${OBJECTS}
+	ar rcs ${LIB} ${OBJECTS}
 
+${OBJECTS}: ${OBJ_DIR}/%.o : ${SRC_DIR}/%.cpp
+	${CC} ${CFLAGS} -c -o $@ $<
 
 .PHONY:
 clean:

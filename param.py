@@ -1,4 +1,5 @@
 
+
 from __future__ import print_function
 
 import numpy as np
@@ -12,6 +13,15 @@ class Param:
             self.load(file_name)
     def __contains__(self, item):
         return item in self.data
+
+    def __str__(self):
+        result = ""
+        for key in self.data_key_order:
+            result +="{}".format(key)
+            for val in self.data[key]:
+                result +=" {}".format(val)
+            result += "\n"
+        return result
 
     def load(self,file_name):
         self.data = {}       
@@ -30,7 +40,14 @@ class Param:
                 if(key in self.data):
                     raise Exception("Duplicate parameters not allowed. Parameter duplicated: \"%s\"." % key)
                 self.data[key] = to_save
+                self.data_key_order.append(key)
         return
+        
+    def set_var(self, var_name, value):
+        assert type(value) is StringType, "set value must be a string"
+        if var_name not in self.data:
+            self.data_key_order.append(var_name)
+        self.data[var_name] = value.split()
     
     def get_string(self,var_name):
         val = self.get(var_name,np.str);
