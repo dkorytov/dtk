@@ -18,7 +18,6 @@ void read_gio(char* file_name, std::string var_name, T*& data,int only_rank=-1){
   // std::cout<<"only_rank "<<only_rank<<std::endl;
   for(int i =0;i<num_ranks;++i){
     if(only_rank==-1){
-      // std::cout<<"Reading all data"<<std::endl;
       rank_size[i] = reader.readNumElems(i);
     }
     else{
@@ -32,21 +31,20 @@ void read_gio(char* file_name, std::string var_name, T*& data,int only_rank=-1){
   }
   T* rank_data = new T[max_size+reader.requestedExtraSpace()/sizeof(T)];
   int64_t offset =0;
-  reader.addVariable(var_name,rank_data,true);
-  for(int i=0;i<num_ranks;++i){
-    // std::cout<<"reading rank"<<i<<std::endl;
+  reader.addVariable(var_name, rank_data, true);
+  for(int i=0; i<num_ranks; ++i){
     if(only_rank == -1 || only_rank == i){
-      // std::cout<<"read"<<std::endl;
-      reader.readData(i,false);
-      std::copy(rank_data,rank_data+rank_size[i],data+offset);
+      reader.readData(i, false);
+      std::copy(rank_data, rank_data+rank_size[i], data+offset);
+
       offset +=rank_size[i];
     }
   }
   delete [] rank_data;
   reader.close();
 }
-extern "C" int64_t get_elem_num(char* file_name);
-
+extern "C" int64_t get_elem_num(char* file_name, int only_rank);
+extern "C" int64_t get_block_num(char* file_name);
 extern "C" void read_gio_float (char* file_name, char* var_name, float*   data, int only_rank);
 extern "C" void read_gio_double(char* file_name, char* var_name, double*  data, int only_rank);
 extern "C" void read_gio_int8  (char* file_name, char* var_name, int8_t*  data, int only_rank); 

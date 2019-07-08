@@ -40,7 +40,7 @@ namespace dtk{
     std::getline(std::cin,t);
     //    std::getchar();
   }
-
+  
   bool ask_continue(){
     std::cout<<"Coninue? [y/yes/enter or n/no]: ";
     return ask_bool();
@@ -78,5 +78,4 @@ namespace dtk{
     else
       return false;
   }
-
 }

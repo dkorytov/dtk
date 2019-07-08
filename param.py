@@ -1,14 +1,14 @@
 
+
+from __future__ import print_function
+
 import numpy as np
 import sys
 import readline
-from collections import OrderedDict
-from types import *
 
 class Param:
+    data = {}
     def __init__(self,file_name=""):
-        self.data = {}
-        self.data_key_order = []
         if(file_name != ""):
             self.load(file_name)
     def __contains__(self, item):
@@ -48,7 +48,6 @@ class Param:
         if var_name not in self.data:
             self.data_key_order.append(var_name)
         self.data[var_name] = value.split()
-
     
     def get_string(self,var_name):
         val = self.get(var_name,np.str);
@@ -90,9 +89,9 @@ class Param:
         elif(val == "false" or val == "False" or val == "FALSE" or val == "F" or val == "f" or val == "0"):
             return False
         else:
-            print "\n\nError: At least one value in parameter \"%s\" cannot convert to bool." %(var_name)
-            print "Values: ",self.data[var_name]
-            print "Aborting.\n"
+            print("\n\nError: At least one value in parameter \"%s\" cannot convert to bool." %(var_name))
+            print("Values: ",self.data[var_name])
+            print("Aborting.\n")
             raise err
 
         
@@ -117,12 +116,12 @@ class Param:
         try:
             return self.data[var_name].astype(dtype)
         except ValueError as err:
-            print "\n\nError: At least one value in parameter \"%s\" cannot convert to %s." %(var_name,str(dtype))
-            print "Values: ",self.data[var_name]
-            print "Aborting.\n"
+            print("\n\nError: At least one value in parameter \"%s\" cannot convert to %s." %(var_name,str(dtype)))
+            print("Values: ",self.data[var_name])
+            print("Aborting.\n")
             raise err
         except KeyError as err:
-            print "\n\nError: Parameter file does not have \"%s\" as parameter.\nAborting.\n" % var_name
+            print("\n\nError: Parameter file does not have \"%s\" as parameter.\nAborting.\n" % var_name)
             raise err
             
 

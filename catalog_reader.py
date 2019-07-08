@@ -1,4 +1,7 @@
 #!/usr/bin/env python2.7
+
+from __future__ import print_function
+
 import numpy as np
 import scipy as sp
 import scipy.spatial
@@ -117,7 +120,7 @@ class Catalog:
         #Check that all steps have the new variables. Otherwise 
         #throw an error
         for step in self.step_data.keys():
-            print "step: ",step
+            print("step: ",step)
             for new_var in new_vars:
                 if new_var not in self.step_data[step].keys():
                     raise KeyError(new_var+" not found in step "+str(step)+". Cannot add new variables until that variable is set for all catalog timesteps")
@@ -130,7 +133,7 @@ class Catalog:
     def add_var_step_replace(self,key_string,steps,new_strings):
         # key string and new strings MUST be stings
         if(len(steps) != len(new_strings)):
-            print "Input steps and new strings must be equal..."
+            print("Input steps and new strings must be equal...")
             raise AssertionError()
         
         dic = {}
@@ -152,40 +155,40 @@ class Catalog:
         
     def read_gio(self,verbose=False):
         if(verbose):
-            print "from file",self.file_source_
+            print("from file",self.file_source_)
         for step in self.step_data.keys():
             if(verbose):
-                print "\treading in step: ",step
+                print("\treading in step: ",step)
             in_file_step = self.in_file_steps[step]
             file_name = self.file_source_.replace(self.step_string_,"%d"%in_file_step)
             for name in self.var_names:
                 if(verbose):
-                    print "\treading in ",name
+                    print("\treading in ",name)
                 data = dtk.gio_read(file_name,
                                     self.var_infile_name[name].replace(self.step_string_,"%d"%in_file_step))
                 self.step_data[step][name] = data
 
     def read_none(self,verbose=False):
         if(verbose):
-            print "sort of from file",self.file_source_
+            print("sort of from file",self.file_source_)
         for step in self.step_data.keys():
             if(verbose):
-                print "fake reading of step: ",step
+                print ("fake reading of step: ",step)
             for name in self.var_names:
                 if(verbose):
-                    print "\tfaking in ",name
+                    print("\tfaking in ",name)
                 self.step_data[step][name] = np.zeros(0,dtype='f')
 
     def read_hdf5(self,verbose=False,index=None):
-        print "from file",self.file_source_
+        print("from file",self.file_source_)
         for step in self.step_data.keys():
             if(verbose):
-                print "\treading in step: ",step
+                print( "\treading in step: ",step)
             in_file_step = self.in_file_steps[step]
             file_name = self.file_source_.replace(self.step_string_,"%d"%in_file_step)
             for name in self.var_names:
                 if(verbose):
-                    print "\treading in ",name
+                    print("\treading in ",name)
                 subfile_data = []
                 if(len(self.subfiles)==0): #if no subfiles are listed, 
                     self.subfiles.append(0)#add a single dummy subfile
@@ -199,7 +202,7 @@ class Catalog:
                             subfile_data.append(hfile[var][:,self.var_index[name]])
                 else:
                     for subfile in self.file_list:
-                        print "reading subfile: ",subfile
+                        print("reading subfile: ",subfile)
                         hfile = h5py.File(subfile,'r')
                         var = self.var_infile_name[name].replace(self.step_string_,"%d"%in_file_step)
                         if(self.var_index[name] == None):
@@ -210,7 +213,7 @@ class Catalog:
                 self.step_data[step][name]=data
 
     def read_hdf5_no_step_file(self,verbose=False,index=None):
-        print "from file",self.file_source_
+        print("from file",self.file_source_)
         if(len(self.subfiles)==0): #if no subfiles are listed, 
             self.subfiles.append(0)#add a single dummy subfile
         tmp_data = {}
@@ -221,15 +224,15 @@ class Catalog:
         if self.file_list == None:
             for subfile in self.subfiles:
                 if(verbose):
-                    print "\t from subfile",subfile
+                    print("\t from subfile",subfile)
                 hfile = h5py.File(self.file_source_.replace(self.subfile_string_,"%d"%subfile),'r')
                 for step in self.step_data.keys():
                     if(verbose):
-                        print "\treading in step: ",step
+                        print("\treading in step: ",step)
                     in_file_step = self.in_file_steps[step]
                     for name in self.var_names:
                         if(verbose):
-                            print "\treading in ",name
+                            print("\treading in ",name)
                         var = self.var_infile_name[name].replace(self.step_string_,"%d"%in_file_step)
                         for rep_rule in self.var_step_replace:
                             if(step in rep_rule[1]):
@@ -242,15 +245,15 @@ class Catalog:
         else:
             for subfile in self.file_list:
                 if(verbose):
-                    print "\t from subfile",subfile
+                    print("\t from subfile",subfile)
                 hfile = h5py.File(subfile,'r')
                 for step in self.step_data.keys():
                     if(verbose):
-                        print "\treading in step: ",step
+                        print("\treading in step: ",step)
                     in_file_step = self.in_file_steps[step]
                     for name in self.var_names:
                         if(verbose):
-                            print "\treading in ",name
+                            print("\treading in ",name)
                         var = self.var_infile_name[name].replace(self.step_string_,"%d"%in_file_step)
                         for rep_rule in self.var_step_replace:
                             if(step in rep_rule[1]):
@@ -307,18 +310,17 @@ class Catalog:
              
         #only merger if they are on the same timestep
         if(verbose):
-            print "merging catalogs"
-
+            print("merging catalogs")
         for step in catalog1.step_data.keys():
             if step in catalog2.step_data.keys():
                 if(verbose):
-                    print "Both have step: ",step
+                    print("Both have step: ",step)
                 self.step_data[step]= {}
                 srt1 = np.argsort(catalog1.step_data[step][join_on])
                 srt2 = np.argsort(catalog2.step_data[step][join_on])
                 if(verbose):
-                    print "cat1 size: ", srt1.size
-                    print "cat2 size: ", srt2.size
+                    print("cat1 size: ", srt1.size)
+                    print("cat2 size: ", srt2.size)
                 i1 = 0
                 i2 = 0
                 i1_max = srt1.size
@@ -328,7 +330,7 @@ class Catalog:
                 unmatched1 = []
                 unmatched2 = []
                 if(verbose):
-                    print "sorting"
+                    print("sorting")
                 while(i1<i1_max and i2<i2_max):
                     val1 = catalog1.step_data[step][join_on][srt1[i1]]
 
@@ -381,12 +383,12 @@ class Catalog:
                 unmatched1 = np.array(unmatched1)
                 unmatched2 = np.array(unmatched2)
                 if(verbose):
-                    print "match1: ", match1.size
-                    print "match2: ", match2.size
-                    print "unmatched1: ", unmatched1.size
-                    print "unmatched2: ", unmatched2.size
+                    print("match1: ", match1.size)
+                    print("match2: ", match2.size)
+                    print("unmatched1: ", unmatched1.size)
+                    print("unmatched2: ", unmatched2.size)
 
-                    print "making merged catalog"
+                    print("making merged catalog")
 
                 #copy over the matched fields to this catalog
                 #and only leave the unmatched data rows in the
@@ -395,7 +397,7 @@ class Catalog:
                 for name in catalog1.var_names:
                     self.step_data[step][name] = catalog1[step][name][match1]
                     if(verbose):
-                        print step,name,"size:",self.step_data[step][name].size
+                        print(step,name,"size:",self.step_data[step][name].size)
                     names_this_step.append(name)
                     if(name not in self.var_names):
                         self.var_names.append(name)
@@ -405,7 +407,7 @@ class Catalog:
                         else:
                             catalog1[step][name]=np.zeros(0,dtype=catalog1[step][name].dtype)
                 for name in catalog2.var_names:
-                    print "name:",name
+                    print("name:",name)
                     if(name not in names_this_step): #not to add the same column multiple times
                         self.step_data[step][name] = catalog2[step][name][match2]
                     if(name not in self.var_names):
@@ -416,11 +418,11 @@ class Catalog:
                         else:
                             catalog2[step][name]=np.zeros(0,dtype=catalog2[step][name].dtype)
                 if(verbose):
-                    print "step: ", step, "vars: ", self.step_data[step].keys()
+                    print("step: ", step, "vars: ", self.step_data[step].keys())
         if(verbose):
-            print "\n\n"
+            print("\n\n")
             for step in self.step_data.keys():
-                print "step: ",step,"vars: ", self.step_data[step].keys()
+                print("step: ",step,"vars: ", self.step_data[step].keys())
 
     #only one way joining catalog1 -> catalog2. Catalog2 does not change.
     def quick_join(self,catalog1,catalog2,join_on,one_to_random=False,remove_matched_1=True,sorter2=None,req_also=None,verbose=False):
@@ -428,15 +430,15 @@ class Catalog:
             self.step_data[step] = {}
             if(sorter2==None):
                 if(verbose):
-                    print "sorting catalog2"
+                    print("sorting catalog2")
                 srt2 = np.argsort(catalog2[step][join_on])
             else:
                 srt2 = sorter2
             if(verbose):
-                print "searching A"
+                print("searching A")
             pos_start = np.searchsorted(catalog2[step][join_on],catalog1[step][join_on],sorter=srt2,side='left')
             if(verbose):
-                print "searching B"
+                print("searching B")
             pos_end   = np.searchsorted(catalog2[step][join_on],catalog1[step][join_on],sorter=srt2,side='right')
             pos_len = pos_end-pos_start
             if(one_to_random):
@@ -447,16 +449,16 @@ class Catalog:
             pos_end = srt2[pos_end.clip(max=srt2.size-1)]
             if(req_also):
                 if(verbose):
-                    print "req_also: ",req_also
+                    print("req_also: ",req_also)
                 matched2= catalog1[step][req_also]==catalog2[step][req_also][pos_start]
                 matched = matched & matched2
             unmatched = np.logical_not(matched)
             matched_indx = pos_start[matched]
             check = catalog1[step][join_on][matched] == catalog2[step][join_on][matched_indx]
             if(verbose):
-                print "check: ",np.sum(check),'/',check.size
-                print "matched: ",np.sum(matched)
-                print "unmatched: ",np.sum(unmatched)
+                print("check: ",np.sum(check),'/',check.size)
+                print("matched: ",np.sum(matched))
+                print("unmatched: ",np.sum(unmatched))
             names_this_step = []
             for name in catalog1.var_names:
                 self.step_data[step][name] = catalog1[step][name][matched]
@@ -485,7 +487,7 @@ class Catalog:
         
     def find(self,step,val):
         if(self.srt==None):
-            print "Not sorted yet"
+            print("Not sorted yet")
             raise Exception('Not Sorted yet!')
         srt_indx = np.searchsorted(self.step_data[step][self.srt_var],val,sorter=self.srt[step])
         if(srt_indx >=0 and srt_indx < self.srt[step].size):
@@ -499,7 +501,7 @@ class Catalog:
     
     def find_all(self,step,val):
         if(self.srt==None):
-            print "Not sorted yet"
+            print("Not sorted yet")
             raise Exception('Not Sorted yet!')
         srt_indx_start = np.searchsorted(self.step_data[step][self.srt_var],val,sorter=self.srt[step],side='left')
         srt_indx_end = np.searchsorted(self.step_data[step][self.srt_var],val,sorter=self.srt[step],side='right')-1

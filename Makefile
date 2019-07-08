@@ -1,9 +1,9 @@
 GENIOD  = genericio
 CC      = mpicxx
 #datastar
-GIOHEADERS =~/proj/hacc/trunk/genericio
-GIO_FRONTEND_LIB = /home/dkorytov/proj/hacc/trunk/datastar.cpu/frontend/lib
-GIO_MPI_LIB =/home/dkorytov/proj/hacc/trunk/datastar.cpu/mpi/lib
+GIOHEADERS =~/hacc/trunk/genericio
+GIO_FRONTEND_LIB = /home/dkorytov/hacc/trunk/cooley/frontend/lib
+GIO_MPI_LIB =/home/dkorytov/hacc/trunk/cooley/mpi/lib
 #cooley
 #GIOHEADERS =/gpfs/mira-home/dkorytov/hacc/trunk/genericio
 #GIO_FRONTEND_LIB =/gpfs/mira-home/dkorytov/hacc/trunk/cooley/frontend/lib
@@ -20,18 +20,19 @@ LIB     = $(LIB_DIR)/${LIB_NAME}
 PYLIB   = ${LIB_DIR}/libpygio.so
 targets = ${LIB} 
 
+
 all: ${PYLIB} ${LIB}
 
 ${PYLIB}: pygio/gio.hpp pygio/gio.cpp
 	${CC} ${CFLAGS} -c -o  pygio/gio.o -fpic pygio/gio.cpp  -fopenmp
 	${CC} -shared -o ${PYLIB} pygio/gio.o -L${GIO_FRONTEND_LIB} -Wl,--whole-archive,-export-dynamic -lGenericIO -Wl,--no-whole-archive -lgomp
 
+
 ${LIB}: ${OBJECTS}
 	ar rcs ${LIB} ${OBJECTS}
 
 ${OBJECTS}: ${OBJ_DIR}/%.o : ${SRC_DIR}/%.cpp
 	${CC} ${CFLAGS} -c -o $@ $<
-
 
 .PHONY:
 clean:
