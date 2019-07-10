@@ -1,9 +1,9 @@
 GENIOD  = genericio
 CC      = mpicxx
 #datastar
-GIOHEADERS =~/hacc/trunk/genericio
-GIO_FRONTEND_LIB = /home/dkorytov/hacc/trunk/cooley/frontend/lib
-GIO_MPI_LIB =/home/dkorytov/hacc/trunk/cooley/mpi/lib
+GIOHEADERS =/home/dkorytov/proj/hacc/trunk/genericio
+GIO_FRONTEND_LIB = /home/dkorytov/proj/hacc/trunk/datastar.cpu/frontend/lib
+GIO_MPI_LIB =/home/dkorytov/proj/hacc/trunk/datastar.cpu/mpi/lib
 #cooley
 #GIOHEADERS =/gpfs/mira-home/dkorytov/hacc/trunk/genericio
 #GIO_FRONTEND_LIB =/gpfs/mira-home/dkorytov/hacc/trunk/cooley/frontend/lib
