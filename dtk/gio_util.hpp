@@ -2,8 +2,8 @@
 #define GIO_UTIL_HPP_
 
 #include <vector>
-#include "GenericIOMPIReader.h"
-#include "GenericIOPosixReader.h"
+// #include "GenericIOMPIReader.h"
+// #include "GenericIOPosixReader.h"
 #include "GenericIO.h"
 #include "mpi.h"
 namespace dtk{
@@ -55,7 +55,7 @@ namespace dtk{
   }
   template <class T>
   void read_gio_quick(std::string file_name,std::string var_name, std::vector<T>& data){
-    /*#ifndef  GENERICIO_NO_MPI
+#ifndef  GENERICIO_NO_MPI
     gio::GenericIO reader(MPI_COMM_WORLD, file_name);
 #else
     gio::GenericIO reader(file_name);
@@ -68,23 +68,23 @@ namespace dtk{
     reader.readData();
     data.resize(size);
     reader.close();
-    */
-    gio::GenericIOMPIReader reader;
-    std::stringstream ss;
-    T* data_array;
-    reader.SetFileName(file_name);
-    reader.SetCommunicator(MPI_COMM_WORLD);
-    reader.SetBlockAssignmentStrategy(gio::RCB_BLOCK_ASSIGNMENT);
-    reader.OpenAndReadHeader();
-    int64_t size = reader.GetNumberOfElements();
-    int pad = gio::CRCSize/sizeof(T);
-    data_array = new T[size+pad];
-    reader.AddVariable(var_name,data,gio::GenericIOBase::ValueHasExtraSpace);
-    reader.ReadData();
-    reader.Close();
-    std::vector<T> new_data(data_array,data_array+size);
-    data.swap(new_data);
-    delete data_array;
+    
+    // gio::GenericIOMPIReader reader;
+    // std::stringstream ss;
+    // T* data_array;
+    // reader.SetFileName(file_name);
+    // reader.SetCommunicator(MPI_COMM_WORLD);
+    // reader.SetBlockAssignmentStrategy(gio::RCB_BLOCK_ASSIGNMENT);
+    // reader.OpenAndReadHeader();
+    // int64_t size = reader.GetNumberOfElements();
+    // int pad = gio::CRCSize/sizeof(T);
+    // data_array = new T[size+pad];
+    // reader.AddVariable(var_name,data,gio::GenericIOBase::ValueHasExtraSpace);
+    // reader.ReadData();
+    // reader.Close();
+    // std::vector<T> new_data(data_array,data_array+size);
+    // data.swap(new_data);
+    // delete data_array;
   }
   
 
