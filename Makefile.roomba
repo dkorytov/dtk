@@ -1,13 +1,18 @@
 GENIOD  = genericio
 CC      = mpicxx
+# roomba
+GIOHEADERS = /data/a/cpac/dkorytov/projects/genericio
+GIO_FRONTEND_LIB = /data/a/cpac/dkorytov/projects/genericio/frontend
+GIO_MPI_LIB = /data/a/cpac/dkorytov/projects/genericio/mpi
+hdf5_inc=/home/dkorytov/.local/include
 #datastar
-GIOHEADERS =~/hacc/trunk/genericio
-GIO_FRONTEND_LIB = /home/dkorytov/hacc/trunk/cooley/frontend/lib
-GIO_MPI_LIB =/home/dkorytov/hacc/trunk/cooley/mpi/lib
+# GIOHEADERS =~/hacc/trunk/genericio
+# GIO_FRONTEND_LIB = /home/dkorytov/hacc/trunk/cooley/frontend/lib
+# GIO_MPI_LIB =/home/dkorytov/hacc/trunk/cooley/mpi/lib
 #cooley
 #GIOHEADERS =/gpfs/mira-home/dkorytov/hacc/trunk/genericio
 #GIO_FRONTEND_LIB =/gpfs/mira-home/dkorytov/hacc/trunk/cooley/frontend/lib
-CFLAGS  = -I. -g -I ${GIOHEADERS} -O3 
+CFLAGS  = -I. -g -I ${GIOHEADERS} -I${hdf5_inc} -O3 
 LDFLAGS = -L${GIO_MPI_LIB} -lGenericIOMPI -lfftw3f -lfftw3_threads -lfftw3 -lm -lpthreads
 INC_DIR = dtk
 SRC_DIR = src
@@ -21,7 +26,7 @@ PYLIB   = ${LIB_DIR}/libpygio.so
 targets = ${LIB} 
 
 
-all: ${PYLIB} ${LIB}
+all:  ${LIB}
 
 ${PYLIB}: pygio/gio.hpp pygio/gio.cpp
 	${CC} ${CFLAGS} -c -o  pygio/gio.o -fpic pygio/gio.cpp  -fopenmp
