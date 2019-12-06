@@ -225,7 +225,7 @@ def resample_distribution(dist_src,dist_target,src_range=None,target_range=None,
     
 def save_dict_hdf5(fname, cat, verbose=True):
     if verbose:
-        print "Saving to", fname
+        print("Saving to", fname)
         t0 = time.time()
     hfile = h5py.File(fname, 'w')
     for key in cat.keys():
@@ -233,11 +233,11 @@ def save_dict_hdf5(fname, cat, verbose=True):
     hfile.close()
     if verbose:
         t1 = time.time()
-        print "\ttime:", t1-t0
+        print("\ttime:", t1-t0)
 
 def load_dict_hdf5(fname, verbose=True):
     if verbose:
-        print "Loading from", fname
+        print("Loading from", fname)
         t0 = time.time()
 
     cat = {}
@@ -246,7 +246,7 @@ def load_dict_hdf5(fname, verbose=True):
         cat[key] = hfile[key].value
     if verbose:
         t1 = time.time()
-        print "\ttime:", t1-t0
+        print("\ttime:", t1-t0)
 
     return cat
 
@@ -318,23 +318,23 @@ class ETA:
     def print_progress(self, i, i_tot, prefix=""):
         eta = convert_sec_to_time_string(self.get_eta(i, i_tot))
         per_iter = convert_sec_to_time_string(self.get_per_iter(i))
-        print "{}{}/{} ETA: {} ({})".format(prefix, i, i_tot, eta, per_iter)
+        print("{}{}/{} ETA: {} ({})".format(prefix, i, i_tot, eta, per_iter))
         return self
     
     def print_done(self, prefix=""):
         t_tot = time.time()-self.t0
-        print "{}DONE. time: {}".format(prefix, convert_sec_to_time_string(t_tot))
+        print("{}DONE. time: {}".format(prefix, convert_sec_to_time_string(t_tot)))
         return self
 
 def convert_sec_to_time_string(t):
     if ~np.isfinite(t):
-        return "nan"
+        return( "nan")
     if t<120:
-        return "{:.2f}s".format(t)
+        return("{:.2f}s".format(t))
     elif t<60*60*2:
-        return "{:.0f}m:{:.0f}s".format(t//60, t%60)
+        return("{:.0f}m:{:.0f}s".format(t//60, t%60))
     else:
-        return "{:.0f}h:{:.0f}m".format(t//3600, t%(3600))
+        return("{:.0f}h:{:.0f}m".format(t//3600, t%(3600)))
     
 def within_relative_tolerance(test_value, target_value, tolerance):
     diff = np.abs((test_value-target_value)/target_value)
