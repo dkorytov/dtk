@@ -1,9 +1,9 @@
 GENIOD  = genericio
 CC      = mpicxx
 # roomba
-GIOHEADERS = /data/a/cpac/dkorytov/projects/genericio
-GIO_FRONTEND_LIB = /data/a/cpac/dkorytov/projects/genericio/frontend
-GIO_MPI_LIB = /data/a/cpac/dkorytov/projects/genericio/mpi
+GIOHEADERS = /home/dkorytov/tools/genericio
+GIO_FRONTEND_LIB = /home/dkorytov/tools/genericio/frontend
+GIO_MPI_LIB = /home/dkorytov/tools/genericio/mpi
 hdf5_inc=/home/dkorytov/.local/include
 #datastar
 # GIOHEADERS =~/hacc/trunk/genericio
@@ -26,7 +26,7 @@ PYLIB   = ${LIB_DIR}/libpygio.so
 targets = ${LIB} 
 
 
-all:  ${LIB}
+all:  ${LIB} ${PYLIB}
 
 ${PYLIB}: pygio/gio.hpp pygio/gio.cpp
 	${CC} ${CFLAGS} -c -o  pygio/gio.o -fpic pygio/gio.cpp  -fopenmp
