@@ -4,10 +4,10 @@ from .param import Param, CosmoParam
 from .cosmo import *
 from .catalog_reader import *
 from .sort import *
+from .util import *
+from .contour import *
 try:
     from .power_spectrum import *
-    from .util import *
-    from .contour import *
 except ImportError as ie:
     print("Could not import util.py and contour.py:",ie.args)
 try:
