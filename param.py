@@ -24,7 +24,8 @@ class Param:
         return result
 
     def load(self,file_name):
-        self.data = {}       
+        self.data = {}
+        self.data_key_order = []
         self.append(file_name)
         return
 
