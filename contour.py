@@ -2,22 +2,22 @@
 import numpy as np
 import scipy.optimize as opt
 from scipy.stats import norm
-from util import *
+from .util import *
 
 def conf_interval_helper(x, pdf, conf_level):
     return np.sum(pdf[pdf > x])-conf_level
 
 
-def conf_interval(H,clvls):
+def conf_interval(H, clvls):
     clvls = np.array(clvls)
     result = np.zeros(clvls.size)
     clvls = clvls*np.sum(H)
-    for i in range(0,clvls.size):
-        result[i] = opt.brentq(conf_interval_helper,0.,np.sum(H),args=(H,clvls[i]))
+    for i in range(0, clvls.size):
+        result[i] = opt.brentq(conf_interval_helper, 0.0, np.sum(H), args=(H, clvls[i]))
     return result
 
 
-def contour_labels(lvls,c_lvls):
+def contour_labels(lvls, c_lvls):
     result = {}
     print(lvls, c_lvls)
     for i in range(0,len(c_lvls)):
@@ -31,7 +31,7 @@ def smoothen_H(data):
     result = np.zeros(data.shape)
     for i in range(-1,1):
         for j in range(-1,1):
-            result[0+max(i,0):xsize+min(i,0),0+max(j,0):ysize+min(j,0)] += data[0-min(i,0):xsize-max(i,0),0-min(j,0):ysize-max(j,0)]
+            result[0+max(i,0):xsize+min(i,0), 0+max(j,0):ysize+min(j,0)] += data[0-min(i,0):xsize-max(i,0), 0-min(j,0):ysize-max(j,0)]
     result[0,:] += 3.0*data[0,:]
     result[-1,:] += 3.0*data[-1,:]
     result[1:,0] += 3.0*data[1:,0]
@@ -55,7 +55,7 @@ def quick_contour(x_bins, y_bins, H, cmap=None, levels=None,
     else:
         Hs = H
     if(levels is None):
-        levels = np.array( [0.5,0.67,.75,0.86,0.95,0.99])
+        levels = np.array([0.5,0.67,.75,0.86,0.95,0.99])
     else:
         levels = np.array(levels)
     contour_lvls = conf_interval(Hs,levels)
@@ -67,9 +67,8 @@ def quick_contour(x_bins, y_bins, H, cmap=None, levels=None,
     if ax is None:
         cs = plt.contour(x_bins_avg,y_bins_avg,Hs.T,levels=contour_lvls,colors=colors)
     else:
-        cs = ax.contour(x_bins_avg,y_bins_avg,Hs.T,levels=contour_lvls,colors=colors)
+        cs = ax.contour(x_bins_avg, y_bins_avg, Hs.T, levels=contour_lvls, colors=colors)
     if(label):
-        labels = contour_labels(levels,contour_lvls)
-        print(labels)
-        plt.clabel(cs,fmt=labels)
+        labels = contour_labels(levels, contour_lvls)
+        plt.clabel(cs, fmt=labels)
     return cs
