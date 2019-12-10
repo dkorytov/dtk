@@ -58,7 +58,8 @@ def quick_contour(x_bins, y_bins, H, cmap=None, levels=None,
         levels = np.array([0.5,0.67,.75,0.86,0.95,0.99])
     else:
         levels = np.array(levels)
-    contour_lvls = conf_interval(Hs,levels)
+    levels = sorted(levels)[::-1]
+    contour_lvls = conf_interval(Hs, levels)
     if(cmap is None):
         cmap = plt.cm.gist_heat_r
     if(colors is None):
