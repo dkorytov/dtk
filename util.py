@@ -256,6 +256,12 @@ def select_dict(dict_cat, slct):
         dict_result[key] = dict_cat[key][slct]
     return dict_result
 
+def reorder_dict(dict_cat, srt):
+    dict_result={}
+    for key in dict_cat.keys():
+        dict_result[key] = dict_cat[key][srt]
+    return dict_result
+
 def decenter_bins(bin_cen):
     diff = np.diff(bin_cen)[0]
     bin_edges = np.zeros(len(bin_cen)+1)
