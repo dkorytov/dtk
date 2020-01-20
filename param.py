@@ -45,7 +45,7 @@ class Param:
         return
         
     def set_var(self, var_name, value):
-        assert type(value) is StringType, "set value must be a string"
+        assert isinstance(value, str), "set value must be a string"
         if var_name not in self.data:
             self.data_key_order.append(var_name)
         self.data[var_name] = value.split()
