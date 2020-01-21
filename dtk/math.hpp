@@ -2,7 +2,9 @@
 #define DTK_MATH_HPP
 #include <cmath>
 #include <cstdlib>
+#include <random>
 namespace dtk{
+  std::default_random_engine dtk_random_engine;
   
   template<class T,class U>
   T max(T* data, U size){
@@ -87,6 +89,32 @@ namespace dtk{
   void rand_fill(T* array, U size){
     for(U i =0; i<size;++i)
       array[i] = rand<T>();
+  }
+
+  template<class T>
+  T normal_random(T mean=0, T sigma=1){
+    std::normal_distribution<T> norm(mean, sigma);
+    return norm(dtk_random_engine);
+  }
+  template<class T>
+  void normal_random(T mean, T sigma, T* output, size_t num){
+    std::normal_distribution<T> norm(mean, sigma);
+    for(size_t i=0;i<num;++i){
+      output[i]=norm(dtk_random_engine);
+      // std::cout<<<<std::endl;
+    }
+  }
+
+  template<class T>
+  void random_vector3d(T& x, T& y, T& z, T radius){
+    std::normal_distribution<T> norm(0, 1);
+    x = norm(dtk_random_engine);
+    y = norm(dtk_random_engine);
+    z = norm(dtk_random_engine);
+    T r = std::sqrt(x*x + y*y + z*z);
+    x = x/r * radius;
+    y = y/r * radius;
+    z = z/r * radius;
   }
 }
 
