@@ -116,6 +116,27 @@ namespace dtk{
     y = y/r * radius;
     z = z/r * radius;
   }
+
+  template<class T>
+  struct Distribution{
+    std::vector<T> cdf;
+    std::vector<T> x;
+    std::uniform_real_distribution(0.0, 1.0)
+    std::default_random_engine dtk_random_engine;
+    Distribution(char* fname){
+      read_hdf5<T>(fname, 'cdf', cdf);
+      read_hdf5<T>(fname, 'x', x);
+      if (cdf.size() != x.size()){
+	std::cout<<"Size of cdf and x are not the same"<<std::endl;
+	throw;
+      }
+    }
+    T get_value(){
+      size_t min, max;
+      min = 0;
+      max = cdf.size()
+    }
+  };
 }
 
 
