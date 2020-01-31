@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <random>
+#include "hdf5_util.hpp"
 namespace dtk{
   std::default_random_engine dtk_random_engine;
   
@@ -121,20 +122,23 @@ namespace dtk{
   struct Distribution{
     std::vector<T> cdf;
     std::vector<T> x;
-    std::uniform_real_distribution(0.0, 1.0)
+    // std::uniform_real_distribution<T> dist(0, 1);
     std::default_random_engine dtk_random_engine;
+    
     Distribution(char* fname){
-      read_hdf5<T>(fname, 'cdf', cdf);
-      read_hdf5<T>(fname, 'x', x);
+      read_hdf5<T>(fname, "cdf", cdf);
+      read_hdf5<T>(fname, "x", x);
       if (cdf.size() != x.size()){
 	std::cout<<"Size of cdf and x are not the same"<<std::endl;
 	throw;
       }
     }
     T get_value(){
-      size_t min, max;
-      min = 0;
-      max = cdf.size()
+      // size_t min, max;
+      // min = 0;
+      // max = cdf.size();
+      throw;
+      return 0;
     }
   };
 }
